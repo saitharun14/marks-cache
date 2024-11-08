@@ -1,6 +1,6 @@
 local M = {}
 
-local data_path = vim.fn.stdpath("data") .. "/marker-cache/marker-cache.json"
+local data_path = vim.fn.stdpath("data") .. "/marks-cache/marks-cache.json"
 local augroup = vim.api.nvim_create_augroup("marker", { clear = true })
 
 local function ensure_directory_exists()
