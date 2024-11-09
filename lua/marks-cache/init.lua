@@ -1,7 +1,7 @@
 local M = {}
 
 local data_path = vim.fn.stdpath("data") .. "/marks-cache/marks-cache.json"
-local augroup = vim.api.nvim_create_augroup("marker", { clear = true })
+local augroup = vim.api.nvim_create_augroup("marks-cache", { clear = true })
 
 local function ensure_directory_exists()
 	local dir_path = vim.fn.fnamemodify(data_path, ":h")
@@ -35,11 +35,12 @@ end
 
 local function add_mark()
 	local key = vim.fn.nr2char(vim.fn.getchar())
-	vim.api.nvim_command("normal! m" .. key)
+	local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+	vim.api.nvim_buf_set_mark(0, key, line, col, {})
 	local cur_buf_path = vim.api.nvim_buf_get_name(0)
 	local marks_data = load_table_from_data()
 	marks_data[cur_buf_path] = marks_data[cur_buf_path] or {}
-	marks_data[cur_buf_path][key] = vim.api.nvim_win_get_cursor(0)
+	marks_data[cur_buf_path][key] = { line, col }
 	save_table_to_data(marks_data)
 end
 M.add_mark = add_mark
